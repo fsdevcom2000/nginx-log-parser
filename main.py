@@ -118,5 +118,3 @@ async def filter_logs(
 @app.get("/logs", response_class=HTMLResponse)
 async def view_logs(request: Request):
     return templates.TemplateResponse("logs.html", {"request": request})
-
-# Swagger: http://localhost:8000/docs
