@@ -16,13 +16,14 @@
 
 ---
 
-Backend:     FastAPI (Python)
-Frontend:    Jinja2 + HTMX + Bootstrap 5
-Парсинг:     Кастомный парсер (parsers.py)
-Хранение:    Локальные файлы (uploads/)
+- Backend:     FastAPI (Python)
+- Frontend:    Jinja2 + HTMX + Bootstrap 5
+- Парсинг:     Кастомный парсер (parsers.py)
+- Хранение:    Локальные файлы (uploads/)
 
 ## Демо
 
 > Запустите локально:
 ```bash
+
 uvicorn main:app --reload --port 8888
