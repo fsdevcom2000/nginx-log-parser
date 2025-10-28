@@ -23,10 +23,11 @@
 
 ## Демо
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 > Запустите локально:
 ```bash
 
 uvicorn main:app --reload --port 8888
+
 
