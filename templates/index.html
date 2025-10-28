@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}NGINX Log Parser{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-lg">
+      <div class="card-body p-5">
+        <h2 class="text-center mb-4">Парсер логов</h2>
+        <p class="text-center text-muted mb-4">
+          Загрузите лог-файл (nginx, apache, jsonl, txt) и получите удобный просмотр
+        </p>
+
+        <!-- Form with HTMX -->
+        <form 
+          hx-post="/api/upload" 
+          hx-target="#result" 
+          hx-swap="outerHTML"
+          hx-encoding="multipart/form-data"
+          class="dropzone needs-validation"
+          id="upload-form"
+          novalidate>
+          
+          <div class="mb-3">
+            <input 
+              type="file" 
+              name="file" 
+              class="form-control form-control-lg" 
+              accept=".log,.txt,.json,.jsonl"
+              required />
+            <div class="invalid-feedback">Выберите файл</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg w-100">
+            Парсить логи
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- result -->
+    <div id="result" class="mt-5"></div>
+  </div>
+</div>
+{% endblock %}

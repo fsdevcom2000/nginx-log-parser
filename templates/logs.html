@@ -1,0 +1,54 @@
+<div class="alert alert-success d-flex align-items-center mb-4">
+  <strong>Готово!</strong>
+  <span class="ms-2">
+    Обработано <strong id="total-count">{{ total }}</strong> записей из 
+    <code id="filename">{{ filename }}</code>
+    {% if truncated %}(показано 100){% endif %}
+  </span>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Логи</h5>
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <input 
+        type="text" 
+        class="form-control form-control-sm" 
+        placeholder="IP, путь, raw..." 
+        name="q"
+        hx-get="/api/filter"
+        hx-trigger="keyup changed delay:300ms"
+        hx-target="#log-table"
+        hx-swap="innerHTML"
+        hx-include="[name='level']"
+        style="width: 220px;"
+      />
+
+      <!-- filter by level -->
+      <select 
+        class="form-select form-select-sm"
+        name="level"
+        hx-get="/api/filter"
+        hx-trigger="change"
+        hx-target="#log-table"
+        hx-swap="innerHTML"
+        hx-include="[name='q']"
+      >
+        <option value="">Все уровни</option>
+        <option value="INFO">INFO</option>
+        <option value="WARN">WARN</option>
+        <option value="ERROR">ERROR</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <!-- HTMX insert table here -->
+      <div id="log-table">
+        {% include "logs_table.html" %}
+      </div>
+    </div>
+  </div>
+</div>

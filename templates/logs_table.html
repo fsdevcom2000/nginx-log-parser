@@ -1,0 +1,69 @@
+{% set limit = limit | default(100) %}
+{% set page = page | default(1) %}
+{% set total = total | default(logs|length) %}
+{% set level = level | default("") %}
+{% set q = q | default("") %}
+<!-- Table -->
+<table class="table table-hover mb-0">
+  <thead class="table-light">
+    <tr>
+      <th>Level</th><th>Time</th><th>IP</th><th>Status</th><th>Path</th><th>Raw</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td><span class="badge {% if log.level == 'ERROR' %}text-danger{% elif log.level == 'WARN' %}text-warning{% else %}text-info{% endif %}">{{ log.level }}</span></td>
+      <td><small class="text-muted">{{ log.time | replace("T", " ") | truncate(19, True, "") if log.time else "—" }}</small></td>
+      <td><code>{{ log.ip or "-" }}</code></td>
+      <td><code>{{ log.status or "-" }}</code></td>
+      <td><code>{{ (log.request.split(" ")[1] if log.request else "-") }}</code></td>
+      <td>
+        <details><summary class="text-primary" style="cursor:pointer">raw</summary>
+          <div class="raw-log p-2 small mt-1">{{ log.raw }}</div>
+        </details>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-center text-muted py-4">Нет логов</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Pagination -->
+{% if total > limit %}
+<div class="d-flex justify-content-between align-items-center mt-3 px-3 pb-3">
+  <div>
+    <small class="text-muted">
+      Показано {{ ((page-1)*limit + 1) }}–{{ [page*limit, total]|min }} из {{ total }}
+    </small>
+  </div>
+
+  <nav>
+    <ul class="pagination pagination-sm mb-0">
+      <!-- Prev -->
+      <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+        <a class="page-link"
+           hx-get="/api/filter"
+           hx-target="#log-table"
+           hx-swap="innerHTML"
+           hx-vals='{"page": {{ page - 1 }}, "level": "{{ level }}", "q": "{{ q }}"}'
+           {% if page <= 1 %}tabindex="-1"{% endif %}>
+          ←
+        </a>
+      </li>
+
+      <!-- Next -->
+      <li class="page-item {% if page * limit >= total %}disabled{% endif %}">
+        <a class="page-link"
+           hx-get="/api/filter"
+           hx-target="#log-table"
+           hx-swap="innerHTML"
+           hx-vals='{"page": {{ page + 1 }}, "level": "{{ level }}", "q": "{{ q }}"}'>
+          →
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endif %}
